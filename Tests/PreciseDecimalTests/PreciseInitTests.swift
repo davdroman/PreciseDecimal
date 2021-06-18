@@ -1,7 +1,7 @@
 import XCTest
 import PreciseDecimal
 
-final class Decimal_PreciseInitTests: XCTestCase {
+final class PreciseInitTests: XCTestCase {
     func testIntegers() {
         assert(0, "0")
         assert(1, "1")
@@ -51,7 +51,7 @@ final class Decimal_PreciseInitTests: XCTestCase {
     }
 }
 
-private extension Decimal_PreciseInitTests {
+private extension PreciseInitTests {
     static let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.locale = Locale(identifier: "en_GB")
