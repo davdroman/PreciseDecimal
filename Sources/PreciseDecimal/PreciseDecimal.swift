@@ -11,15 +11,6 @@ extension Decimal {
     }
 }
 
-extension Double {
-    public init(precise value: Decimal) {
-        guard let double = Self(exactly: value as NSNumber) else {
-            preconditionFailure("Failed to convert Decimal '\(value)' to Double")
-        }
-        self = double
-    }
-}
-
 extension KeyedDecodingContainerProtocol {
     public func decode(_ type: Decimal.Type, forKey key: Self.Key) throws -> Decimal {
         try Decimal(precise: decode(Double.self, forKey: key))
@@ -27,16 +18,6 @@ extension KeyedDecodingContainerProtocol {
 
     public func decodeIfPresent(_ type: Decimal.Type, forKey key: Self.Key) throws -> Decimal? {
         try decodeIfPresent(Double.self, forKey: key).map(Decimal.init(precise:))
-    }
-}
-
-extension KeyedEncodingContainerProtocol {
-    mutating func encode(_ value: Decimal, forKey key: Self.Key) throws {
-        try encode(Double(precise: value), forKey: key)
-    }
-
-    mutating func encodeIfPresent(_ value: Decimal?, forKey key: Self.Key) throws {
-        try encodeIfPresent(value.map(Double.init(precise:)), forKey: key)
     }
 }
 
@@ -50,20 +31,8 @@ extension UnkeyedDecodingContainer {
     }
 }
 
-extension UnkeyedEncodingContainer {
-    mutating func encode(_ value: Decimal) throws {
-        try encode(Double(precise: value))
-    }
-}
-
 extension SingleValueDecodingContainer {
     func decode(_ type: Decimal.Type) throws -> Decimal {
         try Decimal(precise: decode(Double.self))
-    }
-}
-
-extension SingleValueEncodingContainer {
-    mutating func encode(_ value: Decimal) throws {
-        try encode(Double(precise: value))
     }
 }
