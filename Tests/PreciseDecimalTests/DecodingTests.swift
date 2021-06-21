@@ -1,7 +1,7 @@
 import XCTest
 import PreciseDecimal
 
-final class PreciseKeyedDecodingTests: XCTestCase {
+final class DecodingTests: XCTestCase {
     func testDecoding() throws {
         try assertDecodingSuccess(validPayload(), Decimal(precise: 3.133))
         try assertDecodingFailure(invalidPayload())
@@ -17,7 +17,7 @@ final class PreciseKeyedDecodingTests: XCTestCase {
     }
 }
 
-private extension PreciseKeyedDecodingTests {
+private extension DecodingTests {
     private struct DecodableModel: Decodable {
         let decimal: PreciseDecimal
     }
@@ -45,7 +45,7 @@ private extension PreciseKeyedDecodingTests {
     }
 }
 
-private extension PreciseKeyedDecodingTests {
+private extension DecodingTests {
     private struct OptionalDecodableModel: Decodable {
         let decimal: PreciseDecimal?
     }
@@ -73,7 +73,7 @@ private extension PreciseKeyedDecodingTests {
     }
 }
 
-private extension PreciseKeyedDecodingTests {
+private extension DecodingTests {
     func validPayload(line: UInt = #line) throws -> Data {
         try payload(#"{ "decimal": 3.133 }"#, line: line)
     }
