@@ -24,7 +24,7 @@ private extension PreciseKeyedDecodingTests {
 
     func assertDecodingSuccess(_ payload: Data, _ decimal: Decimal, line: UInt = #line) throws {
         try XCTAssertEqual(
-            JSONDecoder().decode(DecodableModel.self, from: payload).decimal,
+            JSONDecoder().decode(DecodableModel.self, from: payload).decimal.value,
             decimal,
             line: line
         )
@@ -52,7 +52,7 @@ private extension PreciseKeyedDecodingTests {
 
     func assertOptionalDecodingSuccess(_ payload: Data, _ decimal: Decimal?, line: UInt = #line) throws {
         try XCTAssertEqual(
-            JSONDecoder().decode(OptionalDecodableModel.self, from: payload).decimal,
+            JSONDecoder().decode(OptionalDecodableModel.self, from: payload).decimal?.value,
             decimal,
             line: line
         )

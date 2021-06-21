@@ -1,6 +1,30 @@
 import Foundation
 
-public typealias PreciseDecimal = Decimal
+public struct PreciseDecimal {
+    public var value: Decimal
+
+    public init(_ value: Double) {
+        self.value = Decimal(precise: value)
+    }
+}
+
+extension PreciseDecimal: ExpressibleByFloatLiteral {
+    public init(floatLiteral value: FloatLiteralType) {
+        self.init(value)
+    }
+}
+
+extension PreciseDecimal: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(floatLiteral: try container.decode(Double.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(value)
+    }
+}
 
 extension Decimal {
     public init(precise value: Double) {
@@ -8,31 +32,5 @@ extension Decimal {
             preconditionFailure("Failed to convert Double '\(value)' to Decimal")
         }
         self = decimal
-    }
-}
-
-extension KeyedDecodingContainerProtocol {
-    public func decode(_ type: Decimal.Type, forKey key: Self.Key) throws -> Decimal {
-        try Decimal(precise: decode(Double.self, forKey: key))
-    }
-
-    public func decodeIfPresent(_ type: Decimal.Type, forKey key: Self.Key) throws -> Decimal? {
-        try decodeIfPresent(Double.self, forKey: key).map(Decimal.init(precise:))
-    }
-}
-
-extension UnkeyedDecodingContainer {
-    mutating func decode(_ type: Decimal.Type) throws -> Decimal {
-        try Decimal(precise: decode(Double.self))
-    }
-
-    mutating func decodeIfPresent(_ type: Decimal.Type) throws -> Decimal? {
-        try decodeIfPresent(Double.self).map(Decimal.init(precise:))
-    }
-}
-
-extension SingleValueDecodingContainer {
-    func decode(_ type: Decimal.Type) throws -> Decimal {
-        try Decimal(precise: decode(Double.self))
     }
 }
