@@ -52,7 +52,38 @@ final class InitTests: XCTestCase {
 }
 
 private extension InitTests {
-    static let formatter: NumberFormatter = {
+    func assert(_ rawValue: Double, _ string: String, line: UInt = #line) {
+        assertDecimal(
+            Decimal(precise: rawValue),
+            string,
+            line: line
+        )
+        assertDecimal(
+            PreciseDecimal(rawValue).value,
+            string,
+            line: line
+        )
+    }
+
+    private func assertDecimal(_ decimal: Decimal, _ string: String, line: UInt = #line) {
+        XCTAssertEqual(
+            decimal,
+            Decimal(string: string),
+            line: line
+        )
+        XCTAssertEqual(
+            decimal.description,
+            string,
+            line: line
+        )
+        XCTAssertEqual(
+            Self.formatter.string(for: decimal),
+            string,
+            line: line
+        )
+    }
+
+    private static let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.locale = Locale(identifier: "en_GB")
         formatter.numberStyle = .decimal
@@ -60,22 +91,4 @@ private extension InitTests {
         formatter.alwaysShowsDecimalSeparator = false
         return formatter
     }()
-
-    func assert(_ rawValue: Double, _ string: String, line: UInt = #line) {
-        XCTAssertEqual(
-            Decimal(precise: rawValue),
-            Decimal(string: string),
-            line: line
-        )
-        XCTAssertEqual(
-            Decimal(precise: rawValue).description,
-            string,
-            line: line
-        )
-        XCTAssertEqual(
-            Self.formatter.string(for: Decimal(precise: rawValue)),
-            string,
-            line: line
-        )
-    }
 }
