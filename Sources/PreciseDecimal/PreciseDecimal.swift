@@ -23,7 +23,7 @@ extension PreciseDecimal: ExpressibleByFloatLiteral {
 extension PreciseDecimal: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(floatLiteral: try container.decode(Double.self))
+        self.init(try container.decode(Double.self))
     }
 
     public func encode(to encoder: Encoder) throws {
