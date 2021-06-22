@@ -138,7 +138,7 @@ private extension InitTests {
             line: line
         )
         XCTAssertEqual(
-            Self.formatter.string(from: decimal),
+            Self.formatter.string(from: decimal as NSDecimalNumber),
             string,
             line: line
         )
