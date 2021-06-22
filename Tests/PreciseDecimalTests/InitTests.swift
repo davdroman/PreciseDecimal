@@ -138,7 +138,7 @@ private extension InitTests {
             line: line
         )
         XCTAssertEqual(
-            Self.formatter.string(for: decimal),
+            Self.formatter.string(from: decimal),
             string,
             line: line
         )
