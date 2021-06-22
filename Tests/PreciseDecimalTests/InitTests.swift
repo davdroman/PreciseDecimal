@@ -92,14 +92,6 @@ final class InitTests: XCTestCase {
 }
 
 private extension InitTests {
-    func assertLiteral(_ preciseDecimal: PreciseDecimal, _ string: String, line: UInt = #line) {
-        assertDecimal(
-            preciseDecimal.value,
-            string,
-            line: line
-        )
-    }
-
     func assert(_ rawValue: Double, _ string: String, line: UInt = #line) {
         assertDecimal(
             PreciseDecimal(rawValue).value,
@@ -108,6 +100,14 @@ private extension InitTests {
         )
         assertDecimal(
             Decimal(precise: rawValue),
+            string,
+            line: line
+        )
+    }
+
+    func assertLiteral(_ preciseDecimal: PreciseDecimal, _ string: String, line: UInt = #line) {
+        assertDecimal(
+            preciseDecimal.value,
             string,
             line: line
         )
