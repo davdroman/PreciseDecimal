@@ -3,6 +3,10 @@ import Foundation
 public struct PreciseDecimal {
     public var value: Decimal
 
+    public init<I: FixedWidthInteger>(_ value: I) {
+        self.value = Decimal(precise: value)
+    }
+
     public init(_ value: Double) {
         self.value = Decimal(precise: value)
     }
@@ -35,6 +39,13 @@ extension PreciseDecimal: Codable {
 }
 
 extension Decimal {
+    public init<I: FixedWidthInteger>(precise value: I) {
+        guard let decimal = Self(string: String(value)) else {
+            preconditionFailure("Failed to convert FixedWidthInteger '\(value)' to Decimal")
+        }
+        self = decimal
+    }
+
     public init(precise value: Double) {
         guard let decimal = Self(string: String(value)) else {
             preconditionFailure("Failed to convert Double '\(value)' to Decimal")
