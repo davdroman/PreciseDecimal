@@ -54,12 +54,12 @@ final class InitTests: XCTestCase {
 private extension InitTests {
     func assert(_ rawValue: Double, _ string: String, line: UInt = #line) {
         assertDecimal(
-            Decimal(precise: rawValue),
+            PreciseDecimal(rawValue).value,
             string,
             line: line
         )
         assertDecimal(
-            PreciseDecimal(rawValue).value,
+            Decimal(precise: rawValue),
             string,
             line: line
         )
