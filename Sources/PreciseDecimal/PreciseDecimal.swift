@@ -8,6 +8,8 @@ public struct PreciseDecimal {
     }
 }
 
+extension PreciseDecimal: Hashable {}
+
 extension PreciseDecimal: ExpressibleByIntegerLiteral {
     public init(integerLiteral value: IntegerLiteralType) {
         self.init(Double(value))
