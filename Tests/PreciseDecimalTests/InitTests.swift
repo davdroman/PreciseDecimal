@@ -148,7 +148,7 @@ private extension InitTests {
         let formatter = NumberFormatter()
         formatter.locale = Locale(identifier: "en_GB")
         formatter.numberStyle = .decimal
-        formatter.hasThousandSeparators = false
+        formatter.usesGroupingSeparator = false // no thousands separator
         formatter.alwaysShowsDecimalSeparator = false
         return formatter
     }()
