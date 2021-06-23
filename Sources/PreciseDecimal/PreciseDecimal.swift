@@ -38,6 +38,10 @@ extension PreciseDecimal: Codable {
     }
 }
 
+extension PreciseDecimal: CustomDebugStringConvertible {
+    public var debugDescription: String { value.description }
+}
+
 extension Decimal {
     public init<I: FixedWidthInteger>(precise value: I) {
         guard let decimal = Self(string: String(value)) else {

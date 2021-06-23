@@ -33,7 +33,3 @@ struct PrecisePrice: Decodable {
 }
 
 func json() -> Data { #"{ "amount": 3.133 }"#.data(using: .utf8)! }
-
-extension PreciseDecimal: CustomStringConvertible {
-    public var description: String { value.description }
-}
