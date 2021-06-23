@@ -62,3 +62,9 @@ Simply [install Arena](https://github.com/finestructure/Arena#how-to-install-are
 ### Why isn't it also a `@propertyWrapper`?
 
 `Decimal`s are often relied upon to accurately represent monetary values in financial applications. Given this delicate use case, I decided the most responsible way to expose this API is as a first-class struct only, to be used wherever a `Decimal` type may be declared. This strict way of offering the library ensures no loss of precision leaks through one's codebase by otherwise forgetting to annotate a `Decimal` property with `@PreciseDecimal`.
+
+### Why doesn't it have [insert here] feature?
+
+In order to keep the library's scope and implementation as lightweight as possible, optimistic for a painless obsolescence once Apple fixes `Decimal`.
+
+Do feel free to [suggest otherwise](https://github.com/davdroman/PreciseDecimal/issues/new) if I missed a vital part of functionality that should *definitely* be in this library.
