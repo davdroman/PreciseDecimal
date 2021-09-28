@@ -2,58 +2,55 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - "**"
+  schedule:
+    - cron: '3 3 * * 2'  # 3:03 AM, every Tuesday
 
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  macos:
-    name: macOS - ${{ matrix.platform.name }}
-    runs-on: macos-latest
-
+  macOS:
+    name: ${{ matrix.platform }} (Swift ${{ matrix.swift }})
+    runs-on: macos-11
     strategy:
       fail-fast: false
       matrix:
         platform:
-          - { name: 'iOS 14.5',     destination: "'platform=iOS Simulator,name=iPhone 8,OS=14.5'" }
-          - { name: 'macOS Latest', destination: "'platform=macOS,arch=x86_64'" }
-
+          - iOS
+          - macOS
+          - tvOS
+          - watchOS
+        swift:
+          - 5.2
+          - 5.3
+          - 5.4
+          - 5.5
     steps:
-      - name: Install xcbeautify
-        run: brew install xcbeautify
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Build and Test
-        run: |
-          NSUnbufferedIO=YES \
-          xcodebuild clean test \
-            -destination ${{ matrix.platform.destination }} \
-            -scheme PreciseDecimal \
-            2>&1 | xcbeautify
-
+    - uses: actions/checkout@v2
+    - uses: mxcl/xcodebuild@v1
+      with:
+        platform: ${{ matrix.platform }}
+        swift: ~${{ matrix.swift }}
+        warnings-as-errors: true
   linux:
-    name: Linux - ${{ matrix.swift.name }}
+    name: Linux (Swift ${{ matrix.swift }})
     runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
         swift:
-          - { name: 'Swift 5.1',    image: '5.1' }
-          - { name: 'Swift 5.2',    image: '5.2' }
-          - { name: 'Swift 5.3',    image: '5.3' }
-          - { name: 'Swift 5.4',    image: '5.4' }
-          - { name: 'Swift Latest', image: 'latest' }
-
+          - 5.2
+          - 5.3
+          - 5.4
+          - 5.5
     container:
-      image: swift:${{ matrix.swift.image }}
-
+      image: swift:${{ matrix.swift }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Build and Test
-        run: swift test --enable-test-discovery
+    - uses: actions/checkout@v2
+    - run: swift test --enable-test-discovery --parallel -Xswiftc -warnings-as-errors
