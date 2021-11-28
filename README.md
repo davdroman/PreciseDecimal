@@ -61,12 +61,38 @@ Simply [install Arena](https://github.com/finestructure/Arena#how-to-install-are
 
 ## FAQ
 
-### Why isn't it also a `@propertyWrapper`?
+### Is this solution bullet-proof?
 
-`Decimal`s are often relied upon to accurately represent monetary values in financial applications. Given this delicate use case, I decided the most responsible way to expose this API is as a first-class struct only, to be used wherever a `Decimal` type may be declared. This strict way of offering the library ensures no loss of precision leaks through one's codebase by otherwise forgetting to annotate a `Decimal` property with `@PreciseDecimal`.
+No.
 
-### Why doesn't it have [insert here] feature?
+`PreciseDecimal` falls short for very high precision numbers. Case in point:
+
+```swift
+let a = PreciseDecimal(  1234567890.0123456789 )
+let b = Decimal(string: "1234567890.0123456789")!
+print(a) // 1234567890.0123458
+print(b) // 1234567890.0123456789
+```
+
+So if you're going to be dealing with **more than 6 decimal places, this library is not for you**. Instead, the best solution as it currently stands is to represent decimals as strings, especially when it comes to JSON serialization.
+
+It's up to Apple and only Apple to introduce real `Decimal` literals into the language, as well as fixing the JSON serialization mechanisms in Foundation.
+
+### Why not make it a `@propertyWrapper`?
+
+Because it's very easy to forget to annotate properties, especially since there aren't any compiler checks or tests to ensure the slight change in behavior it provides, leading to sneaky bugs down the road.
+
+### Why doesn't it have [x] feature?
 
 In order to keep the library's scope and implementation as lightweight as possible, optimistic for a painless obsolescence once Apple fixes `Decimal`.
 
 Do feel free to [suggest otherwise](https://github.com/davdroman/PreciseDecimal/issues/new) if I missed a vital part of functionality that should *definitely* be in this library.
+
+### Will Apple ever fix this?
+
+I don't know.
+
+However, you're [not alone](https://forums.swift.org/t/how-to-initialize-decimal/53630) in your discontent. Here are two relevant issues you can **upvote** to improve the chances for Apple to see them:
+
+- [SR-920](https://bugs.swift.org/browse/SR-920)
+- [SR-7054](https://bugs.swift.org/browse/SR-7054)
