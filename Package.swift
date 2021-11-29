@@ -19,8 +19,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "PreciseDecimal",
-            dependencies: []
+            name: "PreciseDecimal"
         ),
         .testTarget(
             name: "PreciseDecimalTests",
