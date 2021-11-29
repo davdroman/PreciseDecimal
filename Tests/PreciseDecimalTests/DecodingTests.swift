@@ -2,18 +2,18 @@ import XCTest
 import PreciseDecimal
 
 final class DecodingTests: XCTestCase {
-    func testDecoding() throws {
-        try assertDecodingSuccess(validPayload(), Decimal(precise: 3.133))
-        try assertDecodingFailure(invalidPayload())
-        try assertDecodingFailure(nullPayload())
-        try assertDecodingFailure(missingPayload())
+    func testDecoding() {
+        assertDecodingSuccess(payload("3.133"), Decimal(precise: 3.133))
+        assertDecodingFailure(invalidPayload())
+        assertDecodingFailure(nullPayload())
+        assertDecodingFailure(missingPayload())
     }
 
-    func testOptionalDecoding() throws {
-        try assertOptionalDecodingSuccess(validPayload(), Decimal(precise: 3.133))
-        try assertOptionalDecodingFailure(invalidPayload())
-        try assertOptionalDecodingSuccess(nullPayload(), nil)
-        try assertOptionalDecodingSuccess(missingPayload(), nil)
+    func testOptionalDecoding() {
+        assertOptionalDecodingSuccess(payload("3.133"), Decimal(precise: 3.133))
+        assertOptionalDecodingFailure(invalidPayload())
+        assertOptionalDecodingSuccess(nullPayload(), nil)
+        assertOptionalDecodingSuccess(missingPayload(), nil)
     }
 }
 
@@ -22,17 +22,17 @@ private extension DecodingTests {
         let decimal: PreciseDecimal
     }
 
-    func assertDecodingSuccess(_ payload: Data, _ decimal: Decimal, line: UInt = #line) throws {
-        try XCTAssertEqual(
-            JSONDecoder().decode(DecodableModel.self, from: payload).decimal.value,
+    func assertDecodingSuccess(_ payload: Data, _ decimal: Decimal, line: UInt = #line) {
+        XCTAssertEqual(
+            try JSONDecoder().decode(DecodableModel.self, from: payload).decimal.value,
             decimal,
             line: line
         )
     }
 
-    func assertDecodingFailure(_ payload: Data, line: UInt = #line) throws {
-        try XCTAssertThrowsError(
-            JSONDecoder().decode(DecodableModel.self, from: payload),
+    func assertDecodingFailure(_ payload: Data, line: UInt = #line) {
+        XCTAssertThrowsError(
+            try JSONDecoder().decode(DecodableModel.self, from: payload),
             line: line
         ) { error in
             switch error {
@@ -50,17 +50,17 @@ private extension DecodingTests {
         let decimal: PreciseDecimal?
     }
 
-    func assertOptionalDecodingSuccess(_ payload: Data, _ decimal: Decimal?, line: UInt = #line) throws {
-        try XCTAssertEqual(
-            JSONDecoder().decode(OptionalDecodableModel.self, from: payload).decimal?.value,
+    func assertOptionalDecodingSuccess(_ payload: Data, _ decimal: Decimal?, line: UInt = #line) {
+        XCTAssertEqual(
+            try JSONDecoder().decode(OptionalDecodableModel.self, from: payload).decimal?.value,
             decimal,
             line: line
         )
     }
 
-    func assertOptionalDecodingFailure(_ payload: Data, line: UInt = #line) throws {
-        try XCTAssertThrowsError(
-            JSONDecoder().decode(OptionalDecodableModel.self, from: payload),
+    func assertOptionalDecodingFailure(_ payload: Data, line: UInt = #line) {
+        XCTAssertThrowsError(
+            try JSONDecoder().decode(OptionalDecodableModel.self, from: payload),
             line: line
         ) { error in
             switch error {
@@ -74,23 +74,19 @@ private extension DecodingTests {
 }
 
 private extension DecodingTests {
-    func validPayload(line: UInt = #line) throws -> Data {
-        try payload(#"{ "decimal": 3.133 }"#, line: line)
+    func payload(_ value: String) -> Data {
+        Data("{ \"decimal\": \(value) }".utf8)
     }
 
-    func invalidPayload(line: UInt = #line) throws -> Data {
-        try payload(#"{ "decimal": "abc" }"#, line: line)
+    func invalidPayload() -> Data {
+        Data(#"{ "decimal": "abc" }"#.utf8)
     }
 
-    func nullPayload(line: UInt = #line) throws -> Data {
-        try payload(#"{ "decimal": null }"#, line: line)
+    func nullPayload() -> Data {
+        Data(#"{ "decimal": null }"#.utf8)
     }
 
-    func missingPayload(line: UInt = #line) throws -> Data {
-        try payload("{}", line: line)
-    }
-
-    private func payload(_ rawValue: String, line: UInt = #line) throws -> Data {
-        try XCTUnwrap(Data(rawValue.utf8), line: line)
+    func missingPayload() -> Data {
+        Data("{}".utf8)
     }
 }
