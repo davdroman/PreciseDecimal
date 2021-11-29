@@ -3,14 +3,14 @@ import PreciseDecimal
 
 final class DecodingTests: XCTestCase {
     func testDecoding() throws {
-        try assertDecodingSuccess(validPayload(), Decimal(precise: 3.133))
+        try assertDecodingSuccess(validPayload(), PreciseDecimal("3.133"))
         try assertDecodingFailure(invalidPayload())
         try assertDecodingFailure(nullPayload())
         try assertDecodingFailure(missingPayload())
     }
 
     func testOptionalDecoding() throws {
-        try assertOptionalDecodingSuccess(validPayload(), Decimal(precise: 3.133))
+        try assertOptionalDecodingSuccess(validPayload(), PreciseDecimal("3.133"))
         try assertOptionalDecodingFailure(invalidPayload())
         try assertOptionalDecodingSuccess(nullPayload(), nil)
         try assertOptionalDecodingSuccess(missingPayload(), nil)
@@ -22,9 +22,9 @@ private extension DecodingTests {
         let decimal: PreciseDecimal
     }
 
-    func assertDecodingSuccess(_ payload: Data, _ decimal: Decimal, line: UInt = #line) throws {
+    func assertDecodingSuccess(_ payload: Data, _ decimal: PreciseDecimal, line: UInt = #line) throws {
         try XCTAssertEqual(
-            JSONDecoder().decode(DecodableModel.self, from: payload).decimal.value,
+            JSONDecoder().decode(DecodableModel.self, from: payload).decimal,
             decimal,
             line: line
         )
@@ -50,9 +50,9 @@ private extension DecodingTests {
         let decimal: PreciseDecimal?
     }
 
-    func assertOptionalDecodingSuccess(_ payload: Data, _ decimal: Decimal?, line: UInt = #line) throws {
+    func assertOptionalDecodingSuccess(_ payload: Data, _ decimal: PreciseDecimal?, line: UInt = #line) throws {
         try XCTAssertEqual(
-            JSONDecoder().decode(OptionalDecodableModel.self, from: payload).decimal?.value,
+            JSONDecoder().decode(OptionalDecodableModel.self, from: payload).decimal,
             decimal,
             line: line
         )
@@ -75,7 +75,7 @@ private extension DecodingTests {
 
 private extension DecodingTests {
     func validPayload(line: UInt = #line) throws -> Data {
-        try payload(#"{ "decimal": 3.133 }"#, line: line)
+        try payload(#"{ "decimal": "3.133" }"#, line: line)
     }
 
     func invalidPayload(line: UInt = #line) throws -> Data {
