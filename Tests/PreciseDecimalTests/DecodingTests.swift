@@ -3,6 +3,7 @@ import PreciseDecimal
 
 final class DecodingTests: XCTestCase {
     func testDecoding() {
+        assertDecodingSuccess(payload("1234567890.0123456789"), Decimal(string: "1234567890.0123456789")!)
         assertDecodingSuccess(payload("3.133"), Decimal(precise: 3.133))
         assertDecodingFailure(invalidPayload())
         assertDecodingFailure(nullPayload())
@@ -10,6 +11,7 @@ final class DecodingTests: XCTestCase {
     }
 
     func testOptionalDecoding() {
+        assertOptionalDecodingSuccess(payload("1234567890.0123456789"), Decimal(string: "1234567890.0123456789")!)
         assertOptionalDecodingSuccess(payload("3.133"), Decimal(precise: 3.133))
         assertOptionalDecodingFailure(invalidPayload())
         assertOptionalDecodingSuccess(nullPayload(), nil)
