@@ -24,7 +24,14 @@ let package = Package(
         ),
         .testTarget(
             name: "PreciseDecimalTests",
-            dependencies: ["PreciseDecimal"]
+            dependencies: [
+                .target(name: "PreciseDecimal"),
+                .product(name: "XCTJSONKit", package: "XCTJSONKit"),
+            ]
         ),
     ]
 )
+
+package.dependencies = [
+    .package(name: "XCTJSONKit", url: "https://github.com/davdroman/XCTJSONKit", .branch("main")),
+]
