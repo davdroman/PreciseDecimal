@@ -1,7 +1,7 @@
 import XCTest
 import PreciseDecimal
 
-final class InitTests: XCTestCase {
+final class PreciseDecimalTests: XCTestCase {
     func testIntegers() throws {
         try assertString("0", "0")
         try assertString("1", "1")
@@ -95,7 +95,7 @@ final class InitTests: XCTestCase {
     }
 }
 
-private extension InitTests {
+private extension PreciseDecimalTests {
     func assertString(_ sut: String, _ expected: String, line: UInt = #line) throws {
         let decimal = try XCTUnwrap(PreciseDecimal(string: sut)?.value)
         assertDecimal(
