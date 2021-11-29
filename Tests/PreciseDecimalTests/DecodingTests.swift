@@ -1,32 +1,34 @@
-import XCTest
 import PreciseDecimal
+import XCTJSONKit
 
 final class DecodingTests: XCTestCase {
-    func testDecoding() {
-        assertDecodingSuccess(payload("1234567890.0123456789"), Decimal(string: "1234567890.0123456789")!)
-        assertDecodingSuccess(payload("3.133"), Decimal(precise: 3.133))
-        assertDecodingFailure(invalidPayload())
-        assertDecodingFailure(nullPayload())
-        assertDecodingFailure(missingPayload())
-    }
-
-    func testOptionalDecoding() {
-        assertOptionalDecodingSuccess(payload("1234567890.0123456789"), Decimal(string: "1234567890.0123456789")!)
-        assertOptionalDecodingSuccess(payload("3.133"), Decimal(precise: 3.133))
-        assertOptionalDecodingFailure(invalidPayload())
-        assertOptionalDecodingSuccess(nullPayload(), nil)
-        assertOptionalDecodingSuccess(missingPayload(), nil)
+    func test() throws {
+        try XCTAssertJSONDecoding(JSON(raw: "1234567890.0123456789"), PreciseDecimal("1234567890.0123456789"))
+        try XCTAssertJSONDecoding(
+            JSON(raw: #"{ "decimal": 1234567890.0123456789 }"#),
+            ["decimal": PreciseDecimal("1234567890.0123456789")]
+        )
+        try XCTAssertJSONDecoding(JSON(raw: #"[-5, 0, 1234567890.0123456789, 3.133, 4, 1000]"#), [
+            PreciseDecimal("-5"),
+            PreciseDecimal("0"),
+            PreciseDecimal("1234567890.0123456789"),
+            PreciseDecimal("3.133"),
+            PreciseDecimal("4"),
+            PreciseDecimal("1000"),
+        ])
+        XCTAssertThrowsError(try XCTAssertJSONDecoding(JSON(raw: #""NaN""#), PreciseDecimal?.none))
+        XCTAssertThrowsError(try XCTAssertJSONDecoding(JSON(raw: ""), PreciseDecimal?.none))
     }
 }
 
 private extension DecodingTests {
-    private struct DecodableModel: Decodable {
+    private struct DecodableModel: Decodable, Equatable {
         let decimal: PreciseDecimal
     }
 
     func assertDecodingSuccess(_ payload: Data, _ decimal: Decimal, line: UInt = #line) {
         XCTAssertEqual(
-            try JSONDecoder().decode(DecodableModel.self, from: payload).decimal.value,
+            try JSONDecoder().decode(PreciseDecimal.self, from: payload).value,
             decimal,
             line: line
         )
@@ -34,7 +36,7 @@ private extension DecodingTests {
 
     func assertDecodingFailure(_ payload: Data, line: UInt = #line) {
         XCTAssertThrowsError(
-            try JSONDecoder().decode(DecodableModel.self, from: payload),
+            try JSONDecoder().decode(PreciseDecimal.self, from: payload),
             line: line
         ) { error in
             switch error {
@@ -44,51 +46,5 @@ private extension DecodingTests {
                 XCTFail("Unexpected error of type '\(type(of: error))' received", line: line)
             }
         }
-    }
-}
-
-private extension DecodingTests {
-    private struct OptionalDecodableModel: Decodable {
-        let decimal: PreciseDecimal?
-    }
-
-    func assertOptionalDecodingSuccess(_ payload: Data, _ decimal: Decimal?, line: UInt = #line) {
-        XCTAssertEqual(
-            try JSONDecoder().decode(OptionalDecodableModel.self, from: payload).decimal?.value,
-            decimal,
-            line: line
-        )
-    }
-
-    func assertOptionalDecodingFailure(_ payload: Data, line: UInt = #line) {
-        XCTAssertThrowsError(
-            try JSONDecoder().decode(OptionalDecodableModel.self, from: payload),
-            line: line
-        ) { error in
-            switch error {
-            case is DecodingError:
-                break
-            default:
-                XCTFail("Unexpected error of type '\(type(of: error))' received", line: line)
-            }
-        }
-    }
-}
-
-private extension DecodingTests {
-    func payload(_ value: String) -> Data {
-        Data("{ \"decimal\": \(value) }".utf8)
-    }
-
-    func invalidPayload() -> Data {
-        Data(#"{ "decimal": "abc" }"#.utf8)
-    }
-
-    func nullPayload() -> Data {
-        Data(#"{ "decimal": null }"#.utf8)
-    }
-
-    func missingPayload() -> Data {
-        Data("{}".utf8)
     }
 }

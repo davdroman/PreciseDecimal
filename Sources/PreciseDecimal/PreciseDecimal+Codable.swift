@@ -37,7 +37,7 @@ extension PreciseDecimal: Codable {
         guard let valuesArray = storageMirror.children.first?.value as? [Any] else {
             return nil
         }
-        let value = valuesArray.dropFirst(2).first
+        let value = valuesArray.first(where: { $0 is NSNumber || $0 is String })
         #endif
 
         return value

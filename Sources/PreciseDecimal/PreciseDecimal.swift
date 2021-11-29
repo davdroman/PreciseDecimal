@@ -10,6 +10,13 @@ public struct PreciseDecimal {
     public init(_ value: Double) {
         self.value = Decimal(precise: value)
     }
+
+    public init?(string: String) {
+        guard let value = Decimal(string: string) else {
+            return nil
+        }
+        self.value = value
+    }
 }
 
 extension PreciseDecimal: Hashable {}
@@ -23,6 +30,15 @@ extension PreciseDecimal: ExpressibleByIntegerLiteral {
 extension PreciseDecimal: ExpressibleByFloatLiteral {
     public init(floatLiteral value: FloatLiteralType) {
         self.init(value)
+    }
+}
+
+extension PreciseDecimal: ExpressibleByStringLiteral {
+    public init(stringLiteral value: StringLiteralType) {
+        guard let _self = Self.init(string: value) else {
+            fatalError("Invalid PreciseLiteral literal value: \(value)")
+        }
+        self = _self
     }
 }
 

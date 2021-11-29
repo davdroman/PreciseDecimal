@@ -12,19 +12,22 @@ let package = Package(
         .watchOS(.v6),
     ],
     products: [
-        .library(
-            name: "PreciseDecimal",
-            targets: ["PreciseDecimal"]
-        ),
+        .library(name: "PreciseDecimal", targets: ["PreciseDecimal"]),
     ],
     targets: [
         .target(
-            name: "PreciseDecimal",
-            dependencies: []
+            name: "PreciseDecimal"
         ),
         .testTarget(
             name: "PreciseDecimalTests",
-            dependencies: ["PreciseDecimal"]
+            dependencies: [
+                .target(name: "PreciseDecimal"),
+                .product(name: "XCTJSONKit", package: "XCTJSONKit"),
+            ]
         ),
     ]
 )
+
+package.dependencies = [
+    .package(name: "XCTJSONKit", url: "https://github.com/davdroman/XCTJSONKit", .branch("main")),
+]

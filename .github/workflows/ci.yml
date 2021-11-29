@@ -27,8 +27,6 @@ jobs:
           - tvOS
           - watchOS
         swift:
-          - 5.2
-          - 5.3
           - 5.4
           - 5.5
     steps:
@@ -45,8 +43,6 @@ jobs:
       fail-fast: false
       matrix:
         swift:
-          - 5.2
-          - 5.3
           - 5.4
           - 5.5
     container:
