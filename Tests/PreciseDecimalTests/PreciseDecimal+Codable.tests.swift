@@ -1,96 +1,19 @@
-import XCTest
 import PreciseDecimal
+import XCTJSONKit
 
 final class PreciseDecimalCodableTests: XCTestCase {
+    func testEncoding() throws {
+        try XCTAssertJSONEncoding("0" as PreciseDecimal, .string("0"))
+        try XCTAssertJSONEncoding("3.133" as PreciseDecimal, .string("3.133"))
+        try XCTAssertJSONEncoding("-3.133" as PreciseDecimal, .string("-3.133"))
+        try XCTAssertJSONEncoding("1234567890.0123456789" as PreciseDecimal, .string("1234567890.0123456789"))
+        try XCTAssertJSONEncoding("-1234567890.0123456789" as PreciseDecimal, .string("-1234567890.0123456789"))
+    }
+
     func testDecoding() throws {
-        try assertDecodingSuccess(validPayload(), PreciseDecimal("3.133"))
-        try assertDecodingFailure(invalidPayload())
-        try assertDecodingFailure(nullPayload())
-        try assertDecodingFailure(missingPayload())
-    }
-
-    func testOptionalDecoding() throws {
-        try assertOptionalDecodingSuccess(validPayload(), PreciseDecimal("3.133"))
-        try assertOptionalDecodingFailure(invalidPayload())
-        try assertOptionalDecodingSuccess(nullPayload(), nil)
-        try assertOptionalDecodingSuccess(missingPayload(), nil)
-    }
-}
-
-private extension PreciseDecimalCodableTests {
-    private struct DecodableModel: Decodable {
-        let decimal: PreciseDecimal
-    }
-
-    func assertDecodingSuccess(_ payload: Data, _ decimal: PreciseDecimal, line: UInt = #line) throws {
-        try XCTAssertEqual(
-            JSONDecoder().decode(DecodableModel.self, from: payload).decimal,
-            decimal,
-            line: line
-        )
-    }
-
-    func assertDecodingFailure(_ payload: Data, line: UInt = #line) throws {
-        try XCTAssertThrowsError(
-            JSONDecoder().decode(DecodableModel.self, from: payload),
-            line: line
-        ) { error in
-            switch error {
-            case is DecodingError:
-                break
-            default:
-                XCTFail("Unexpected error of type '\(type(of: error))' received", line: line)
-            }
-        }
-    }
-}
-
-private extension PreciseDecimalCodableTests {
-    private struct OptionalDecodableModel: Decodable {
-        let decimal: PreciseDecimal?
-    }
-
-    func assertOptionalDecodingSuccess(_ payload: Data, _ decimal: PreciseDecimal?, line: UInt = #line) throws {
-        try XCTAssertEqual(
-            JSONDecoder().decode(OptionalDecodableModel.self, from: payload).decimal,
-            decimal,
-            line: line
-        )
-    }
-
-    func assertOptionalDecodingFailure(_ payload: Data, line: UInt = #line) throws {
-        try XCTAssertThrowsError(
-            JSONDecoder().decode(OptionalDecodableModel.self, from: payload),
-            line: line
-        ) { error in
-            switch error {
-            case is DecodingError:
-                break
-            default:
-                XCTFail("Unexpected error of type '\(type(of: error))' received", line: line)
-            }
-        }
-    }
-}
-
-private extension PreciseDecimalCodableTests {
-    func validPayload(line: UInt = #line) throws -> Data {
-        try payload(#"{ "decimal": "3.133" }"#, line: line)
-    }
-
-    func invalidPayload(line: UInt = #line) throws -> Data {
-        try payload(#"{ "decimal": "abc" }"#, line: line)
-    }
-
-    func nullPayload(line: UInt = #line) throws -> Data {
-        try payload(#"{ "decimal": null }"#, line: line)
-    }
-
-    func missingPayload(line: UInt = #line) throws -> Data {
-        try payload("{}", line: line)
-    }
-
-    private func payload(_ rawValue: String, line: UInt = #line) throws -> Data {
-        try XCTUnwrap(Data(rawValue.utf8), line: line)
+        try XCTAssertJSONDecoding(.string("3.133"), PreciseDecimal(string: "3.133"))
+        XCTAssertThrowsError(try XCTAssertJSONDecoding(.number(try XCTUnwrap(Decimal(string: "3.133"))), "3.133" as PreciseDecimal))
+        XCTAssertThrowsError(try XCTAssertJSONDecoding(.null, "3.133" as PreciseDecimal))
+        XCTAssertThrowsError(try XCTAssertJSONDecoding(.raw("{}"), "3.133" as PreciseDecimal))
     }
 }
