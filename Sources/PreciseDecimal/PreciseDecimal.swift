@@ -1,6 +1,6 @@
 import Foundation
 
-public struct PreciseDecimal: Hashable {
+public struct PreciseDecimal {
     public var value: Decimal
 
     public init?(string: String) {
@@ -10,3 +10,5 @@ public struct PreciseDecimal: Hashable {
         self.value = decimal
     }
 }
+
+extension PreciseDecimal: Hashable {}
