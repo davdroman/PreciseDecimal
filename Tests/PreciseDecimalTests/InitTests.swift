@@ -235,6 +235,8 @@ private extension InitTests {
             string,
             line: line
         )
+        let _: PreciseDecimal = .init(floatLiteral: 3)
+        let _: PreciseDecimal = 3.5
     }
 
     private static let formatter: NumberFormatter = {
