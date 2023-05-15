@@ -32,5 +32,5 @@ let package = Package(
 )
 
 package.dependencies = [
-    .package(url: "https://github.com/davdroman/swift-json-testing", .branch("main")),
+    .package(url: "https://github.com/davdroman/swift-json-testing", branch: "main"),
 ]
