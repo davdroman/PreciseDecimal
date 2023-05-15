@@ -1,5 +1,5 @@
 import PreciseDecimal
-import XCTJSONKit
+import JSONTesting
 
 final class PreciseDecimalCodableTests: XCTestCase {
     func testEncoding() throws {

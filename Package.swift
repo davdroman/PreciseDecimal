@@ -25,12 +25,12 @@ let package = Package(
             name: "PreciseDecimalTests",
             dependencies: [
                 .target(name: "PreciseDecimal"),
-                .product(name: "XCTJSONKit", package: "XCTJSONKit"),
+                .product(name: "JSONTesting", package: "swift-json-testing"),
             ]
         ),
     ]
 )
 
 package.dependencies = [
-    .package(name: "XCTJSONKit", url: "https://github.com/davdroman/XCTJSONKit", .branch("main")),
+    .package(url: "https://github.com/davdroman/swift-json-testing", .branch("main")),
 ]
