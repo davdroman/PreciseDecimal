@@ -52,6 +52,7 @@ jobs:
         action: ${{ matrix.action }}
         platform: ${{ matrix.platform }}
         swift: ~${{ matrix.swift }}
+        scheme: PreciseDecimal
   linux:
     name: Linux (Swift ${{ matrix.swift }})
     runs-on: ubuntu-latest
