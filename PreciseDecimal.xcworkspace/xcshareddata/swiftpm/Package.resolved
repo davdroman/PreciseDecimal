@@ -1,34 +1,32 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "swift-custom-dump",
-        "repositoryURL": "https://github.com/pointfreeco/swift-custom-dump",
-        "state": {
-          "branch": null,
-          "revision": "505aa98716275fbd045d8f934fee3337c82ffbd3",
-          "version": "0.10.3"
-        }
-      },
-      {
-        "package": "swift-json-testing",
-        "repositoryURL": "https://github.com/davdroman/swift-json-testing",
-        "state": {
-          "branch": "main",
-          "revision": "9223048c0e9de244b6ba4f4f81a16828f44db13e",
-          "version": null
-        }
-      },
-      {
-        "package": "xctest-dynamic-overlay",
-        "repositoryURL": "https://github.com/pointfreeco/xctest-dynamic-overlay",
-        "state": {
-          "branch": null,
-          "revision": "4af50b38daf0037cfbab15514a241224c3f62f98",
-          "version": "0.8.5"
-        }
+  "pins" : [
+    {
+      "identity" : "swift-custom-dump",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-custom-dump",
+      "state" : {
+        "revision" : "edd66cace818e1b1c6f1b3349bb1d8e00d6f8b01",
+        "version" : "1.0.0"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "swift-json-testing",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/davdroman/swift-json-testing",
+      "state" : {
+        "revision" : "de48704db4af7d448bc27aea305b39494fed6eec",
+        "version" : "0.2.0"
+      }
+    },
+    {
+      "identity" : "xctest-dynamic-overlay",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
+      "state" : {
+        "revision" : "23cbf2294e350076ea4dbd7d5d047c1e76b03631",
+        "version" : "1.0.2"
+      }
+    }
+  ],
+  "version" : 2
 }
