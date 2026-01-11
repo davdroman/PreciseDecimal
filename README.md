@@ -53,12 +53,6 @@ let json = #"{ "amount": 3.133 }"#.data(using: .utf8)!
 let goodDecimal = try JSONDecoder().decode(Price.self, from: json).amount // 3.133
 ```
 
-## Try it out!
-
-PreciseDecimal supports [Arena](https://github.com/finestructure/Arena) to effortlessly take it for a spin in a playground before you decide to add it to your codebase.
-
-Simply [install Arena](https://github.com/finestructure/Arena#how-to-install-arena) and run `arena davdroman/PreciseDecimal --platform macos` in your terminal.
-
 ## FAQ
 
 ### Is this solution bullet-proof?
