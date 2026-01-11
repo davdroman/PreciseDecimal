@@ -4,6 +4,11 @@
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdavdroman%2FPreciseDecimal%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/davdroman/PreciseDecimal)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdavdroman%2FPreciseDecimal%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/davdroman/PreciseDecimal)
 
+> [!NOTE]
+> The JSON decoding precision issues described below have been fixed in Swift 5.9 / iOS 17 / macOS 14 and later.
+>
+> See the [Foundation preview announcement](https://www.swift.org/blog/foundation-preview-now-available/#performance:~:text=Even,500%25%2E) for details.
+
 ## Introduction
 
 Swift has long suffered a problem with its `Decimal` type: [unapparent loss of precision](https://bugs.swift.org/browse/SR-8409).
