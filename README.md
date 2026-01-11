@@ -8,6 +8,8 @@
 > The JSON decoding precision issues described below have been fixed in Swift 5.9 / iOS 17 / macOS 14 and later.
 >
 > See the [Foundation preview announcement](https://www.swift.org/blog/foundation-preview-now-available/#performance:~:text=Even,500%25%2E) for details.
+>
+> As a general note, I strongly encourage you to move away from using the `Decimal` type altogether and instead opting for more correct APIs such as https://github.com/mgriebling/BigDecimal.
 
 ## Introduction
 
