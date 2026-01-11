@@ -41,8 +41,21 @@ jobs:
           - swift: "6.2"
             os: macos-15
     steps:
-      - uses: actions/checkout@v5
-      - uses: mxcl/xcodebuild@v3
+      - name: Git Checkout
+        uses: actions/checkout@v5
+
+      - name: Select Xcode version
+        uses: mxcl/xcodebuild@v3
+        with:
+          swift: ~${{ matrix.swift }}
+          action: none
+
+      - if: matrix.platform != 'macOS'
+        name: Download Required Runtimes
+        run: xcodebuild -downloadPlatform ${{ matrix.platform }}
+
+      - name: Test Library
+        uses: mxcl/xcodebuild@v3
         with:
           swift: ~${{ matrix.swift }}
           platform: ${{ matrix.platform }}
