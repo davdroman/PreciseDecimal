@@ -59,7 +59,7 @@ jobs:
         with:
           swift: ~${{ matrix.swift }}
           platform: ${{ matrix.platform }}
-          action: ${{ matrix.action }}
+          action: test
           scheme: PreciseDecimal
   linux:
     name: Linux (Swift ${{ matrix.swift }})
